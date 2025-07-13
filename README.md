@@ -29,13 +29,13 @@ npm start
 
 ## Set Up AWS CLI and Boto3:
 ### Install AWS CLI and configure it with AWS credentials.
-    1. Download and install the install following the link https://awscli.amazonaws.com/AWSCLIV2.msi. Follow the instructions
-    2. Verify by ```aws --version```
+    1. Download and install the installer following the link https://awscli.amazonaws.com/AWSCLIV2.msi. Follow the instructions
+    2. Verify by ***aws --version***
        
 #### Configuring AWS.
     1. Requirement Access KeyID, Secret Access Key, Region name, Output format.
-       To get Acess KeyID & Secret Access key : ```Login to AWS Console → IAM → Users → Select your user → Security Credentials → Create access key → Choose "CLI" use case → Copy Access Key ID & Secret Access Key.```
-    2. On the terminal type ```aws configure``` and provide the details gathered in point #1 
+       To get Acess KeyID & Secret Access key : Login to AWS Console → IAM → Users → Select your user → Security Credentials → Create access key → Choose "CLI" use case → Copy Access Key ID & Secret Access Key.
+    2. On the terminal type ***aws configure*** and provide the details gathered in point #1 
     
 ### Install python
    
