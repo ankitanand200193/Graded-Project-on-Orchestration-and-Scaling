@@ -16,7 +16,7 @@ MONGO_URL="specifyYourMongoURLHereWithDatabaseNameInTheEndOk"
 Finally install packages in both the services by running the command `npm install`.
 
 <br/>
-For frontend, you have to install and start the frontend serve:
+For frontend, you have to install and start the frontend server:
 
 ```bash
 cd frontend
