@@ -100,14 +100,37 @@ sudo systemctl enable jenkins
 sudo systemctl start jenkins
 
 ```
+
 2. Access Jenkins here : http://EC2-Public-IP:8080
+
 3. Unlock the passoword : ``` sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
+
 4. **Docker installation:**
    ```
    sudo apt-get update
    sudo apt-get install -y docker.io
    sudo systemctl enable --now docker
    ```
+5. AWS CLI installed
+
+6. Install Plugins:  Go to Manage Jenkins → Plugins → Available and install: ✅ Docker Pipeline, ✅ Amazon ECR, ✅ GitHub Integration / Git Plugin, ✅ Pipeline
+
+7. Configure AWS Credentials in Jenkins: Navigate to Manage Jenkins → Credentials → System → Global Credentials → Add Credentials, then set Kind to *Username with password*, Username to *AWS*, Password to the output of ``aws ecr get-login-password```, and ID to *aws-ecr-credentials*.
+
+8. Github webhook setup:
+
+| Field            | Value                                                                    |
+| ---------------- | ------------------------------------------------------------------------ |
+| **Payload URL**  | `http://<your-jenkins-url>/github-webhook/`                              |
+| **Content type** | `application/json`                                                       |
+| **Secret**       | *(optional)* Add a secret if you want to secure communication            |
+| **Events**       | Choose “**Just the push event**” (or also enable Pull request if needed) |
+
+You can test the setup by hitting on recent deliveries. 
+
+Note : **<your-jenkins-url>** it should not include your pipeline name. **github-webhook** is constant component.
+
+
 
 
 
