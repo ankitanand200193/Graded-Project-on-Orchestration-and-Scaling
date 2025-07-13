@@ -11,24 +11,16 @@ pipeline {
     githubPush()
   }
 
-  options {
-    skipDefaultCheckout()
-  }
-
   stages {
     stage('Checkout Code') {
-      when {
-        branch 'main'
-      }
+    
       steps {
         git branch: 'main', url: 'https://github.com/ankitanand200193/Graded-Project-on-Orchestration-and-Scaling.git'
       }
     }
 
     stage('Login to Amazon ECR') {
-      when {
-        branch 'main'
-      }
+     
       steps {
         script {
           sh '''
@@ -40,9 +32,7 @@ pipeline {
     }
 
     stage('Build and Push backendprofileservice') {
-      when {
-        branch 'main'
-      }
+      
       steps {
         script {
           def image1 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendprofileservice:${IMAGE_TAG}", "./backend/backendprofileservice")
@@ -52,9 +42,7 @@ pipeline {
     }
 
     stage('Build and Push backendhelloservice') {
-      when {
-        branch 'main'
-      }
+ 
       steps {
         script {
           def image2 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendhelloservice:${IMAGE_TAG}", "./backend/backendhelloservice")
@@ -64,9 +52,8 @@ pipeline {
     }
 
     stage('Build and Push frontend') {
-      when {
-        branch 'main'
-      }
+      
+      
       steps {
         script {
           def image3 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/frontend:${IMAGE_TAG}", "./frontend")
