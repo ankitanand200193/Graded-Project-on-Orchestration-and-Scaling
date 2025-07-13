@@ -81,7 +81,7 @@ Verify : docker info | grep -i ecr
           Allow SSH (port 22) – your IP 
           Allow HTTP (port 8080) – your IP or 0.0.0.0/0 (for Jenkins access)
 
-#### Jenkins installation :
+#### Jenkins Setup :
 1. Install Jenkins
    
 ```
@@ -111,13 +111,11 @@ sudo systemctl start jenkins
    sudo apt-get install -y docker.io
    sudo systemctl enable --now docker
    ```
-5. AWS CLI installed
+5. Install Plugins:  Go to Manage Jenkins → Plugins → Available and install: ✅ Docker Pipeline, ✅ Amazon ECR, ✅ GitHub Integration / Git Plugin, ✅ Pipeline
 
-6. Install Plugins:  Go to Manage Jenkins → Plugins → Available and install: ✅ Docker Pipeline, ✅ Amazon ECR, ✅ GitHub Integration / Git Plugin, ✅ Pipeline
+6. Configure AWS Credentials in Jenkins: Navigate to Manage Jenkins → Credentials → System → Global Credentials → Add Credentials, then set Kind to *Username with password*, Username to *AWS*, Password to the output of ``aws ecr get-login-password```, and ID to *aws-ecr-credentials*.
 
-7. Configure AWS Credentials in Jenkins: Navigate to Manage Jenkins → Credentials → System → Global Credentials → Add Credentials, then set Kind to *Username with password*, Username to *AWS*, Password to the output of ``aws ecr get-login-password```, and ID to *aws-ecr-credentials*.
-
-8. Github webhook setup:
+7. Github webhook setup:
 
 | Field            | Value                                                                    |
 | ---------------- | ------------------------------------------------------------------------ |
@@ -129,6 +127,8 @@ sudo systemctl start jenkins
 You can test the setup by hitting on recent deliveries. 
 
 Note : **<your-jenkins-url>** it should not include your pipeline name. **github-webhook** is constant component.
+
+
 
 
 
