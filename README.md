@@ -64,7 +64,7 @@ Pre-requisite: AWS configured ; IAM user with ECR permissions ; Docker installed
 
 Note: Only highlighted should be adjust as per the user.
    
-Verify : docker info | grep -i ecr
+Verify : ```docker info | grep -i ecr```
 
 5. Push images to ECR by : ```docker push 975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice:latest```
 
