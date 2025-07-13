@@ -52,7 +52,7 @@ npm start
 
 1. Create Dockerfile in helloservice, profile service and frontend folders
 2. Create 3 repos in ECR and name them in their service name.
-3. Build the images using ```docker build -t AWS-repo-name: tag``` like docker build -t ankitanand/backendprofileservice:latest .
+3. Build the images using *docker build -t complete-AWS-repo-name-url : tag* like ```docker build -t  975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice:latest .```
 4. Push the images to ECR
 
    4.1: First authenticate docker to push images to ECR by:
