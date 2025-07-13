@@ -51,19 +51,63 @@ npm start
 ## Step 2: Prepare the MERN Application
 
 1. Create Dockerfile in helloservice, profile service and frontend folders
-2. Create 3 repos in ECR and name them in their service name.
-3. Build the images using *docker build -t complete-AWS-repo-name-url : tag* like ```docker build -t  975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice:latest .```
-4. Push the images to ECR
 
-   4.1: First authenticate docker to push images to ECR by:
+2. Create 3 repos in ECR and name them in their service name.
+
+3. Build the images using *docker build -t complete-AWS-repo-name-url : tag* like ```docker build -t  975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice:latest .```
+
+4. Authenticate docker to push images to  ECR
+
+Pre-requisite: AWS configured ; IAM user with ECR permissions ; Docker installed
    
-   Pre-requisite: AWS configured ; IAM user with ECR permissions ; Docker installed
+   ```aws ecr get-login-password --region **ap-south-1** | docker login --username AWS --password-stdin **975050024946.dkr.ecr.ap-south-1.amazonaws.com**```   
+
+Note: Only highlighted should be adjust as per the user.
    
-   ```aws ecr get-login-password --region **ap-south-1** | docker login --username AWS --password-stdin **975050024946.dkr.ecr.ap-south-1.amazonaws.com**```
+Verify : docker info | grep -i ecr
+
+5. Push images to ECR by : ```docker push 975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice:latest```
+
+## Step 3: Create Github repo of the source code
+
+1. Create the repo.
+2. Git clone the repo and then git push all the content to the repo.
+
+## Step 4: Continuous Integration with Jenkins 
+
+#### EC2 pre-requisites
+1.  t2.medium (at least 2 GB RAM)
+2.  Security Group: 
+          Allow SSH (port 22) – your IP 
+          Allow HTTP (port 8080) – your IP or 0.0.0.0/0 (for Jenkins access)
+
+#### Jenkins installation :
+1. Install Jenkins
    
-   Note: Only highlighted should be adjust as per the user.
-   
-    4.2 : Verify : docker info | grep -i ecr
+```
+# run the following at once
+sudo apt update
+sudo apt upgrade -y
+sudo apt install openjdk-17-jre -y
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+/usr/share/keyrings/jenkins-keyring.asc > /dev/null
+ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+/etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install jenkins -y
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+
+```
+2. Access Jenkins here : http://EC2-Public-IP:8080
+3. Unlock the passoword : ``` sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
+4. **Docker installation:**
+   ```
+   sudo apt-get update
+   sudo apt-get install -y docker.io
+   sudo systemctl enable --now docker
+   ```
 
 
 
