@@ -7,40 +7,33 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/")
+      .get(`${process.env.REACT_APP_API_URL}/`)
       .then((response) => {
         setMessage(response.data.msg);
       })
-      .catch((error) => console.error("Error fetching data:", error));
+      .catch((error) => console.error("Error fetching message:", error));
   }, []);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/fetchUser")
+      .get(`${process.env.REACT_APP_API_URL}/fetchUser`)
       .then((response) => {
         setProfile(response.data);
-        
       })
-      .catch((error) => console.error("Error fetching data:", error));
-  },[]);
-
-  
+      .catch((error) => console.error("Error fetching users:", error));
+  }, []);
 
   return (
     <div className="App">
       <h1>{message}</h1>
       <div>
         <h2>Profile</h2>
-        {
-        profile.map((user) => {
-            console.log('user', user)
-          return (
-            <div>
-              <h3>Name: {user.name}</h3>
-              <h3>Age: {user.age}</h3>
-            </div>
-          );
-        })}
+        {profile.map((user, index) => (
+          <div key={index}>
+            <h3>Name: {user.name}</h3>
+            <h3>Age: {user.age}</h3>
+          </div>
+        ))}
       </div>
     </div>
   );
