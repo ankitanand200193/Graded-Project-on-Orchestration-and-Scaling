@@ -23,6 +23,11 @@ cd frontend
 npm install
 npm start
 ```
+.env variable for frontend:
+
+Port: 3000
+REACT_APP_PROFILE_API: 
+REACT_APP_HELLO_API:
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # Ankit Documentation
