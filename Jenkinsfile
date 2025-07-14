@@ -35,7 +35,7 @@ pipeline {
       
       steps {
         script {
-          def image1 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendprofileservice:${IMAGE_TAG}", "./backend/backendprofileservice")
+          def image1 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendprofileservice:${IMAGE_TAG}", "./backend/profileService")
           image1.push()
         }
       }
@@ -45,7 +45,7 @@ pipeline {
  
       steps {
         script {
-          def image2 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendhelloservice:${IMAGE_TAG}", "./backend/backendhelloservice")
+          def image2 = docker.build("${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/ankitanand/backendhelloservice:${IMAGE_TAG}", "./backend/helloService")
           image2.push()
         }
       }

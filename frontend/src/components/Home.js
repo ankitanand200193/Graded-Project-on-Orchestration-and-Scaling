@@ -4,12 +4,16 @@ import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import axios from "axios";
 
+// ✅ Use environment variables
+const HELLO_API = process.env.REACT_APP_HELLO_API;
+const PROFILE_API = process.env.REACT_APP_PROFILE_API;
+
 function Home() {
   const [message, setMessage] = useState("");
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/")
+      .get(`${HELLO_API}/`)
       .then((res) => setMessage(res.data.msg))
       .catch((err) => console.error("Error:", err));
   }, []);
@@ -27,7 +31,7 @@ function UserProfile() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3002/fetchUser")
+      .get(`${PROFILE_API}/fetchUser`)
       .then((res) => setProfile(res.data))
       .catch((err) => console.error("Error:", err));
   }, []);
@@ -60,3 +64,5 @@ function App() {
 }
 
 export default App;
+
+
