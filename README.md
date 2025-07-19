@@ -109,7 +109,7 @@ sudo systemctl start jenkins
 
 2. Access Jenkins here : http://EC2-Public-IP:8080
 
-3. Unlock the passoword : ``` sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
+3. Unlock the password : ``` sudo cat /var/lib/jenkins/secrets/initialAdminPassword ```
 
 4. **Docker installation:**
    ```
@@ -144,18 +144,20 @@ You can test the setup by hitting on recent deliveries.
 
 Note : **<your-jenkins-url>** it should not include your pipeline name. **github-webhook** is constant component.
 
-8. Write the Jenkinsfile in the SCM and build the pipline.Enter the github url, main branch name, select the credentials.
-9. Go to the github and make a commit to see the pipeline being triggered.
+10. Write the Jenkinsfile in the SCM and build the pipline.Enter the github url, main branch name, select the credentials.
+11. Go to the github and make a commit to see the pipeline being triggered.
 
 ## Step 5 : Building infrastructure with Boto3
 
-Check-list before provisioning infrastructure:
+#### Check-list before provisioning infrastructure:
+
 1. VPC and subnets should be created in public and subnet should be allowed assigning IPs to the EC2.
 2. Security group should have port open : 3000(frontend), 3001(helloService), 3002(profileService), 22(SSH), 80(nginx & load balancer)
 3. Ensure route table should is attached to the internet gateway.
 4. Ensure target group health check path is / or /health.
 5. Create a ECR role so that the EC2 can access the ECR service
 6. Keep handy an AMI, key-pair and MONG_URL for the ease of provising the infrastructure.
+7. Create a destroy.py file also to turndown all the resources.
     
 
 #### Testing the infrastructure:
@@ -213,7 +215,7 @@ Enable & reload:
 sudo ln -s /etc/nginx/sites-available/ankitanand.sbs /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
-
+       
 
 
 
