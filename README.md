@@ -147,7 +147,7 @@ Note : **<your-jenkins-url>** it should not include your pipeline name. **github
 10. Write the Jenkinsfile in the SCM and build the pipline.Enter the github url, main branch name, select the credentials.
 11. Go to the github and make a commit to see the pipeline being triggered.
 
-## Step 5 : Building infrastructure with Boto3
+## Step 5-9 : Building infrastructure with Boto3
 
 #### Check-list before provisioning infrastructure:
 
@@ -215,8 +215,45 @@ Enable & reload:
 sudo ln -s /etc/nginx/sites-available/ankitanand.sbs /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+
        
 
+## Step 11 : Setting up Cloudwatch Alarm
+##### Steps to Set Up a CloudWatch Alarm
+
+1. **Navigate to CloudWatch Console**
+
+   * Go to **CloudWatch** from AWS Management Console.
+
+2. **Create a New Alarm**
+
+   * Click **Alarms** > **All alarms** > **Create alarm**.
+
+3. **Select a Metric**
+
+   * Choose **Select metric**.
+   * Browse **EC2 > Per-Instance Metrics > CPUUtilization** (or desired metric).
+   * Select the instance and click **Select metric**.
+
+4. **Define Conditions**
+
+   * Set threshold (e.g., CPU > 2%).
+   * Define evaluation period (e.g., 5 data points of 1 minute each).
+
+5. **Configure Notifications**
+
+   * Choose **Create new SNS topic** or existing one.
+   * Add email endpoint (confirm subscription via email).
+
+6. **Name and Create**
+
+   * Give the alarm a name (e.g., `HighCPUAlarm`).
+   * Click **Create alarm**.
+
+7. **Verify Alarm**
+
+   * Alarm appears under **CloudWatch > Alarms** with its status (OK/ALARM).
 
 
 
