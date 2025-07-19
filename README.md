@@ -144,7 +144,77 @@ You can test the setup by hitting on recent deliveries.
 
 Note : **<your-jenkins-url>** it should not include your pipeline name. **github-webhook** is constant component.
 
-8. 
+8. Write the Jenkinsfile in the SCM and build the pipline.Enter the github url, main branch name, select the credentials.
+9. Go to the github and make a commit to see the pipeline being triggered.
+
+## Step 5 : Building infrastructure with Boto3
+
+Check-list before provisioning infrastructure:
+1. VPC and subnets should be created in public and subnet should be allowed assigning IPs to the EC2.
+2. Security group should have port open : 3000(frontend), 3001(helloService), 3002(profileService), 22(SSH), 80(nginx & load balancer)
+3. Ensure route table should is attached to the internet gateway.
+4. Ensure target group health check path is / or /health.
+5. Create a ECR role so that the EC2 can access the ECR service
+6. Keep handy an AMI, key-pair and MONG_URL for the ease of provising the infrastructure.
+    
+
+#### Testing the infrastructure:
+
+1. Check the VPC, security group, subnets and route table on the console.
+2. SSH into the frontend and backend ec2 to check the ECR images being pulled 
+3. Check the ALB and ensure the rule and listener are correct. Target groups are healthy.
+4. Hit the frontend IP:3000 to access the services.
+5. Hit the backend IP:3001/3002 to check the hello and profile services are accessible.
+
+#### Configuring DNS for frontend:
+##### 1. Install Nginx
+
+```bash
+sudo apt update -y && sudo apt install nginx -y
+sudo systemctl enable nginx --now
+```
+
+##### 2. Open Ports
+
+* **AWS Security Group:** Allow HTTP (80) & HTTPS (443).
+* **Firewall:** `sudo ufw allow 'Nginx Full'`
+
+##### 3. Point Domain to EC2
+
+* Add **A Record:** `ankitanand.sbs → <Frontend_EC2_PUBLIC_IP>`
+* Test: `ping ankitanand.sbs`
+
+##### 4. Configure Nginx for Frontend
+
+```bash
+sudo nano /etc/nginx/sites-available/ankitanand.sbs
+```
+
+**Config:**
+
+```nginx
+server {
+    listen 80;
+    server_name ankitanand.sbs;
+    location / {
+        proxy_pass http://localhost:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+Enable & reload:
+
+```bash
+sudo ln -s /etc/nginx/sites-available/ankitanand.sbs /etc/nginx/sites-enabled/
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+
 
 
 
