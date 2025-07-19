@@ -216,6 +216,110 @@ sudo ln -s /etc/nginx/sites-available/ankitanand.sbs /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+## Step 10: EKS cluster deployement:
+
+##### **1. Pre-Requisites**
+
+* **IAM Permissions:** User/role must have EKS, EC2, VPC, and IAM privileges.
+* **AWS CLI Installed:**
+
+  ```bash
+  aws --version
+  ```
+* **kubectl Installed:**
+
+  ```bash
+  kubectl version --client
+  ```
+* **Key Pair:** Create an EC2 key pair for SSH access if needed.
+
+---
+
+## **2. Create an EKS Cluster (AWS Console)**
+
+### **2.1 Navigate to EKS**
+
+* Go to **AWS Console → EKS → Add cluster → Create.**
+
+### **2.2 Configure Cluster**
+
+* **Cluster name:** `mern-cluster` (or your desired name).
+* **Kubernetes version:** Use the default/latest.
+* **Role:** Create/assign a new IAM role `EKS-ClusterRole` with `AmazonEKSClusterPolicy`.
+
+Click **Next**.
+
+### **2.3 Networking**
+
+* **VPC:** Choose existing or create a new VPC.
+* **Subnets:** Select at least two subnets (e.g., `ap-south-1a` & `ap-south-1b`).
+* **Security group:** Default or custom.
+* **Cluster endpoint access:** Public and private (recommended).
+
+Click **Next → Create.**
+
+---
+
+## **3. Add Node Group (Worker Nodes)**
+
+### **3.1 Open Node Group Creation**
+
+* Go to **EKS Console → Clusters → mern-cluster → Compute → Add Node Group**.
+
+### **3.2 Configure Node Group**
+
+* **Name:** `mern-node-group`.
+* **Node IAM Role:** Create or use `EKS-Node-Role` with `AmazonEKSWorkerNodePolicy`, `AmazonEC2ContainerRegistryReadOnly`, and `AmazonEKS_CNI_Policy`.
+
+Click **Next.**
+
+### **3.3 Compute Settings**
+
+* **Instance type:** `t3.medium` (or higher).
+* **Scaling:** Desired = 2, Min = 1, Max = 3.
+* **Disk size:** 20 GiB.
+
+Click **Next.**
+
+### **3.4 Networking**
+
+* Select the **2 subnets** created above.
+
+Click **Next → Create.**
+
+---
+
+## **4. Configure kubectl on your local machine**
+
+### **4.1 Update kubeconfig**
+
+Run:
+
+```bash
+aws eks --region ap-south-1 update-kubeconfig --name mern-cluster
+```
+
+Expected output:
+
+```
+Updated context arn:aws:eks:ap-south-1:xxx:cluster/mern-cluster in /home/user/.kube/config
+```
+
+### **4.2 Verify Connection**
+
+```bash
+kubectl get nodes
+```
+
+Expected output:
+
+```
+NAME                                        STATUS   ROLES    AGE   VERSION
+ip-10-0-1-xx.ap-south-1.compute.internal    Ready    <none>   2m    v1.29.x
+```
+
+---
+
 
        
 
