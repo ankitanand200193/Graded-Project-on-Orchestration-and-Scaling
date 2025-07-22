@@ -147,7 +147,7 @@ Note : **<your-jenkins-url>** it should not include your pipeline name. **github
 10. Write the Jenkinsfile in the SCM and build the pipline.Enter the github url, main branch name, select the credentials.
 11. Go to the github and make a commit to see the pipeline being triggered.
 
-## Step 5 : Building infrastructure with Boto3
+## Step 5-9 : Building infrastructure with Boto3
 
 #### Check-list before provisioning infrastructure:
 
@@ -215,8 +215,149 @@ Enable & reload:
 sudo ln -s /etc/nginx/sites-available/ankitanand.sbs /etc/nginx/sites-enabled/
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+## Step 10: EKS cluster deployement:
+
+##### **1. Pre-Requisites**
+
+* **IAM Permissions:** User/role must have EKS, EC2, VPC, and IAM privileges.
+* **AWS CLI Installed:**
+
+  ```bash
+  aws --version
+  ```
+* **kubectl Installed:**
+
+  ```bash
+  kubectl version --client
+  ```
+* **Key Pair:** Create an EC2 key pair for SSH access if needed.
+
+---
+
+## **2. Create an EKS Cluster (AWS Console)**
+
+### **2.1 Navigate to EKS**
+
+* Go to **AWS Console → EKS → Add cluster → Create.**
+
+### **2.2 Configure Cluster**
+
+* **Cluster name:** `mern-cluster` (or your desired name).
+* **Kubernetes version:** Use the default/latest.
+* **Role:** Create/assign a new IAM role `EKS-ClusterRole` with `AmazonEKSClusterPolicy`.
+
+Click **Next**.
+
+### **2.3 Networking**
+
+* **VPC:** Choose existing or create a new VPC.
+* **Subnets:** Select at least two subnets (e.g., `ap-south-1a` & `ap-south-1b`).
+* **Security group:** Default or custom.
+* **Cluster endpoint access:** Public and private (recommended).
+
+Click **Next → Create.**
+
+---
+
+## **3. Add Node Group (Worker Nodes)**
+
+### **3.1 Open Node Group Creation**
+
+* Go to **EKS Console → Clusters → mern-cluster → Compute → Add Node Group**.
+
+### **3.2 Configure Node Group**
+
+* **Name:** `mern-node-group`.
+* **Node IAM Role:** Create or use `EKS-Node-Role` with `AmazonEKSWorkerNodePolicy`, `AmazonEC2ContainerRegistryReadOnly`, and `AmazonEKS_CNI_Policy`.
+
+Click **Next.**
+
+### **3.3 Compute Settings**
+
+* **Instance type:** `t3.medium` (or higher).
+* **Scaling:** Desired = 2, Min = 1, Max = 3.
+* **Disk size:** 20 GiB.
+
+Click **Next.**
+
+### **3.4 Networking**
+
+* Select the **2 subnets** created above.
+
+Click **Next → Create.**
+
+---
+
+## **4. Configure kubectl on your local machine**
+
+### **4.1 Update kubeconfig**
+
+Run:
+
+```bash
+aws eks --region ap-south-1 update-kubeconfig --name mern-cluster
+```
+
+Expected output:
+
+```
+Updated context arn:aws:eks:ap-south-1:xxx:cluster/mern-cluster in /home/user/.kube/config
+```
+
+### **4.2 Verify Connection**
+
+```bash
+kubectl get nodes
+```
+
+Expected output:
+
+```
+NAME                                        STATUS   ROLES    AGE   VERSION
+ip-10-0-1-xx.ap-south-1.compute.internal    Ready    <none>   2m    v1.29.x
+```
+
+---
+
+
        
 
+## Step 11 : Setting up Cloudwatch Alarm
+##### Steps to Set Up a CloudWatch Alarm
+
+1. **Navigate to CloudWatch Console**
+
+   * Go to **CloudWatch** from AWS Management Console.
+
+2. **Create a New Alarm**
+
+   * Click **Alarms** > **All alarms** > **Create alarm**.
+
+3. **Select a Metric**
+
+   * Choose **Select metric**.
+   * Browse **EC2 > Per-Instance Metrics > CPUUtilization** (or desired metric).
+   * Select the instance and click **Select metric**.
+
+4. **Define Conditions**
+
+   * Set threshold (e.g., CPU > 2%).
+   * Define evaluation period (e.g., 5 data points of 1 minute each).
+
+5. **Configure Notifications**
+
+   * Choose **Create new SNS topic** or existing one.
+   * Add email endpoint (confirm subscription via email).
+
+6. **Name and Create**
+
+   * Give the alarm a name (e.g., `HighCPUAlarm`).
+   * Click **Create alarm**.
+
+7. **Verify Alarm**
+
+   * Alarm appears under **CloudWatch > Alarms** with its status (OK/ALARM).
 
 
 

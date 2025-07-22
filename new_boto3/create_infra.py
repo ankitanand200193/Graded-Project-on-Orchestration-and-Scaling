@@ -28,7 +28,7 @@ AMI_ID = "ami-0f918f7e67a3323f0"
 INSTANCE_TYPE = "t3.micro"
 KEY_NAME = "AnkitAnandHeroViredB10"
 IAM_INSTANCE_PROFILE = "ankit-ecr-pull-ec2"
-MONGO_URL = "mongodb+srv://ankit_200193:dwg2Cb4278nAqAEI@cluster0.ou9e6.mongodb.net/MERNapp"
+MONGO_URL = "Your-mongo_URL/MERNapp"
 
 # Boto3 clients
 ec2 = boto3.client('ec2', region_name=region)
