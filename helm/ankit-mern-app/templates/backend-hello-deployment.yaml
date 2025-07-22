@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-hello
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-hello
+  template:
+    metadata:
+      labels:
+        app: backend-hello
+    spec:
+      containers:
+        - name: backend-hello
+          image: "{{ .Values.backendHello.image.repository }}:{{ .Values.backendHello.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.backendHello.port }}
+          env:
+            - name: PORT
+              value: "{{ .Values.backendHello.port }}"
+            - name: MONGO_URL
+              value: "{{ .Values.mongoUrl }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-hello
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: backend-hello
+  ports:
+    - port: {{ .Values.backendHello.port }}
+      targetPort: {{ .Values.backendHello.port }}
+      nodePort: 31001

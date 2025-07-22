@@ -1,0 +1,24 @@
+namespace: mern-app-ankit
+
+mongoUrl: "mongodb+srv://ankit_200193:dwg2Cb4278nAqAEI@cluster0.ou9e6.mongodb.net/MERNapp"
+
+backendHello:
+  image:
+    repository: 975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendhelloservice
+    tag: latest
+  port: 3001
+
+backendProfile:
+  image:
+    repository: 975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/backendprofileservice
+    tag: latest
+  port: 3002
+
+frontend:
+  replicaCount: 1
+  image:
+    repository: 975050024946.dkr.ecr.ap-south-1.amazonaws.com/ankitanand/frontend
+    tag: latest
+  service:
+  
+    port: 3000

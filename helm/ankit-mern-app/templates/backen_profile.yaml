@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-profile
+  namespace: {{ .Values.namespace }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-profile
+  template:
+    metadata:
+      labels:
+        app: backend-profile
+    spec:
+      containers:
+        - name: backend-profile
+          image: "{{ .Values.backendProfile.image.repository }}:{{ .Values.backendProfile.image.tag }}"
+          ports:
+            - containerPort: {{ .Values.backendProfile.port }}
+          env:
+            - name: PORT
+              value: "{{ .Values.backendProfile.port }}"
+            - name: MONGO_URL
+              value: "{{ .Values.mongoUrl }}"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-profile
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: backend-profile
+  ports:
+    - port: {{ .Values.backendProfile.port }}
+      targetPort: {{ .Values.backendProfile.port }}
+      nodePort: 31002
