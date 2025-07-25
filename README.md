@@ -358,6 +358,88 @@ ip-10-0-1-xx.ap-south-1.compute.internal    Ready    <none>   2m    v1.29.x
 7. **Verify Alarm**
 
    * Alarm appears under **CloudWatch > Alarms** with its status (OK/ALARM).
+  
+## Step 12: MongoDB Snapshot Backup with AWS Lambda (pymongo + bson)
+
+### Step-by-Step Setup
+
+#### Create IAM Role for Lambda
+
+1. Go to **IAM > Roles > Create Role**
+2. Choose: **Lambda**
+3. Attach policies:
+
+   * `AWSLambdaBasicExecutionRole`
+   * `AmazonS3FullAccess`
+4. Name the role: `lambda-mongo-backup-role`
+
+---
+
+#### Create Lambda Function
+
+1. Go to **Lambda > Create Function**
+2. Runtime: **Python 3.12**
+3. Permissions: Use existing role → `lambda-mongo-backup-role`
+
+---
+
+#### Prepare Local Code Folder
+
+1. Create a folder named `mongo_backup_lambda`
+2. Add your backup script `lambda_function.py`
+3. Install dependencies locally:
+
+   ```bash
+   pip install pymongo bson -t .
+   ```
+4. Zip everything:
+
+   ```bash
+   zip -r mongo_backup_lambda.zip .
+   ```
+
+---
+
+#### Upload to Lambda
+
+1. In Lambda > Code Source:
+
+   * Click **Upload from > .zip file**
+   * Upload `mongo_backup_lambda.zip`
+2. Set Handler to:
+
+   ```
+   lambda_function.lambda_handler
+   ```
+
+---
+
+#### Set Environment Variables
+
+Go to **Lambda > Configuration > Environment Variables**, add:
+
+| Key         | Value                      |
+| ----------- | -------------------------- |
+| `MONGO_URI` | Your MongoDB Atlas URI with db name     |
+| `S3_BUCKET` | Your target S3 bucket name |
+
+---
+
+#### 6⃣ Test the Lambda Function
+
+1. Use a blank test event:
+2. Run the function
+3. Check S3 bucket for backup files
+
+   * Format:
+
+     ```
+     mongodb_backup/{collection_name}/{timestamp}.bson
+     ```
+
+---
+
+
 
 
 
